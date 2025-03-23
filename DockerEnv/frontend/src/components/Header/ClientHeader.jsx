@@ -1,20 +1,17 @@
-'use client'
-import Image from 'next/image'
-
-import logo from '@/assets/logo.png'
+import logo from '~/assets/logo.png'
 import { useState } from 'react'
 import { FiHome } from 'react-icons/fi'
 import { LuLogIn } from 'react-icons/lu'
 import { MdOutlineShoppingCart } from 'react-icons/md'
 
-function Header() {
-  const [searchValue, setSearchValue] = useState<string>('')
+function ClientHeader() {
+  const [searchValue, setSearchValue] = useState('')
 
   return (
     <div className="border-b-[2px] border-b-gray-300 w-full h-fit">
       <div className="container mx-auto">
         <div className="flex items-center justify-between py-2">
-          <Image
+          <img
             src={logo}
             alt=""
             width={25}
@@ -51,4 +48,4 @@ function Header() {
   )
 }
 
-export default Header
+export default ClientHeader

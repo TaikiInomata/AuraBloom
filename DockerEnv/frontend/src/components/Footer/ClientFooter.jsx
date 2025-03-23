@@ -1,8 +1,7 @@
-import Image from 'next/image'
-import logo from '@/assets/logo.png'
-import footerIcons from '@/assets/footer-icon.png'
+import logo from '~/assets/logo.png'
+import footerIcons from '~/assets/footer-icon.png'
 
-function Footer() {
+function ClientFooter() {
   return (
     <footer className="bg-gray-50 text-black py-10 px-6 md:px-16">
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -65,4 +64,4 @@ function Footer() {
   )
 }
 
-export default Footer
+export default ClientFooter

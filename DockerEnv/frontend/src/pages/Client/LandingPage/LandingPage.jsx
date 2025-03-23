@@ -1,25 +1,33 @@
-import Image from 'next/image'
-import banner from '@/assets/banner.png'
-import img1 from '@/assets/img1.png'
-import img2 from '@/assets/img2.jpg'
-import img3 from '@/assets/img3.jpg'
-import img4 from '@/assets/img4.png'
-import img5 from '@/assets/img5.png'
-import img6 from '@/assets/img6.png'
-import img7 from '@/assets/img7.png'
-import img8 from '@/assets/img8.jpg'
-import img9 from '@/assets/img9.png'
-import img10 from '@/assets/img10.png'
-import product1 from '@/assets/product1.png'
-import product2 from '@/assets/product2.png'
-import product3 from '@/assets/product3.png'
-import product4 from '@/assets/product4.png'
-import product5 from '@/assets/product5.png'
+import banner from '~/assets/banner.png'
+import img1 from '~/assets/img1.png'
+import img2 from '~/assets/img2.jpg'
+import img3 from '~/assets/img3.jpg'
+import img4 from '~/assets/img4.png'
+import img5 from '~/assets/img5.png'
+import img6 from '~/assets/img6.png'
+import img7 from '~/assets/img7.png'
+import img8 from '~/assets/img8.jpg'
+import img9 from '~/assets/img9.png'
+import img10 from '~/assets/img10.png'
+import product1 from '~/assets/product1.png'
+import product2 from '~/assets/product2.png'
+import product3 from '~/assets/product3.png'
+import product4 from '~/assets/product4.png'
+import product5 from '~/assets/product5.png'
 import { FiPlus } from 'react-icons/fi'
+import { useEffect, useState } from 'react'
+import { fetchLandingPageAPI } from '~/apis'
 
-export default function Home() {
+function LandingPage() {
+
+  const [landingPageData, setLandingPageData] = useState({})
+
+  useEffect(() => {
+    fetchLandingPageAPI().then(data => setLandingPageData(data.landingPage))
+  }, [])
+
   return (
-    <>
+    <div>
       <div className="">
         <div className="container mx-auto">
           <ul className="p-0 flex items-center justify-between w-full py-4">
@@ -36,11 +44,9 @@ export default function Home() {
 
       {/* Banner */}
       <div className='w-full h-[600px] relative'>
-        <Image
-          src={banner}
+        <img
+          src={landingPageData?.banner1}
           alt="banner"
-          width={undefined}
-          height={undefined}
           className="w-full h-full object-cover"
         />
 
@@ -56,8 +62,8 @@ export default function Home() {
 
         <div className="my-6 grid grid-cols-3 gap-6">
           <div className="relative">
-            <Image
-              src={img1}
+            <img
+              src={landingPageData?.banner2}
               alt="img1"
               width={undefined}
               height={undefined}
@@ -66,8 +72,8 @@ export default function Home() {
             <p className='absolute bottom-8 left-8 text-white'>New Arrivals</p>
           </div>
           <div className="relative">
-            <Image
-              src={img2}
+            <img
+              src={landingPageData?.banner3}
               alt="img2"
               width={undefined}
               height={undefined}
@@ -76,8 +82,8 @@ export default function Home() {
             <p className='absolute bottom-8 left-8 text-white'>The Casual Edit</p>
           </div>
           <div className="relative">
-            <Image
-              src={img3}
+            <img
+              src={landingPageData?.banner4}
               alt="img3"
               width={undefined}
               height={undefined}
@@ -88,89 +94,35 @@ export default function Home() {
 
         </div>
 
-        <div className='my-10'>What to Wear Now</div>
+        <div className='my-10'>Hôm nay mặc gì?</div>
 
         <div className="grid grid-cols-5 gap-6">
-          <div className="">
-            <div className="relative w-fit h-fit mb-2">
-              <Image
-                src={product1}
-                alt="product1"
-                width={undefined}
-                height={undefined}
-                className="h-[279px] object-cover"
-              />
-              <FiPlus className='absolute bottom-4 right-4 cursor-pointer'/>
+          {landingPageData?.products?.map(product => 
+            <div className="hover:scale-105 transition-transform hover:ease-in-out hover:duration-300 cursor-pointer hover:shadow-xl rounded-lg overflow-hidden" key={product?._id}>
+              <div className="relative w-fit h-fit mb-2">
+                <img
+                  src={product?.avatar}
+                  alt="product1"
+                  width={undefined}
+                  height={undefined}
+                  className="w-full aspect-square object-cover"
+                />
+                <FiPlus className='absolute bottom-4 right-4 cursor-pointer'/>
+              </div>
+              <div className='px-2 py-1'>
+                <p className='font-medium'>{product?.name}</p>
+              <p className='text-sm'>{product?.avgPrice.toLocaleString('vi-vn')}<sup>đ</sup></p>
+              </div>
+              
             </div>
-            <p className='font-medium'>Classic Easy Zipper Tote</p>
-            <p className='text-sm'>$298</p>
-          </div>
-
-          <div className="">
-            <div className="relative w-fit h-fit mb-2">
-              <Image
-                src={product2}
-                alt="product2"
-                width={undefined}
-                height={undefined}
-                className="h-[279px] object-cover"
-              />
-              <FiPlus className='absolute bottom-4 right-4 cursor-pointer'/>
-            </div>
-            <p className='font-medium'>Classic Easy Zipper Tote</p>
-            <p className='text-sm'>$298</p>
-          </div>
-
-          <div className="">
-            <div className="relative w-fit h-fit mb-2">
-              <Image
-                src={product3}
-                alt="product3"
-                width={undefined}
-                height={undefined}
-                className="h-[279px] object-cover"
-              />
-              <FiPlus className='absolute bottom-4 right-4 cursor-pointer'/>
-            </div>
-            <p className='font-medium'>Classic Easy Zipper Tote</p>
-            <p className='text-sm'>$298</p>
-          </div>
-
-          <div className="">
-            <div className="relative w-fit h-fit mb-2">
-              <Image
-                src={product4}
-                alt="product4"
-                width={undefined}
-                height={undefined}
-                className="h-[279px] object-cover"
-              />
-              <FiPlus className='absolute bottom-4 right-4 cursor-pointer'/>
-            </div>
-            <p className='font-medium'>Classic Easy Zipper Tote</p>
-            <p className='text-sm'>$298</p>
-          </div>
-
-          <div className="">
-            <div className="relative w-fit h-fit mb-2">
-              <Image
-                src={product5}
-                alt="product5"
-                width={undefined}
-                height={undefined}
-                className="h-[279px] object-cover"
-              />
-              <FiPlus className='absolute bottom-4 right-4 cursor-pointer'/>
-            </div>
-            <p className='font-medium'>Classic Easy Zipper Tote</p>
-            <p className='text-sm'>$298</p>
-          </div>
+          )}
+          
         </div>
 
         <div className="my-10 grid grid-cols-2 gap-6">
           <div className="relative">
-            <Image
-              src={img5}
+            <img
+              src={landingPageData?.banner5}
               alt="img5"
               width={undefined}
               height={undefined}
@@ -180,8 +132,8 @@ export default function Home() {
             <p className='absolute bottom-8 left-8 text-white'>The Smart Chic</p>
           </div>
           <div className="relative bg-gradient-to-b from-transparent via-black/0 to-black/20">
-            <Image
-              src={img4}
+            <img
+              src={landingPageData?.banner6}
               alt="img4"
               width={undefined}
               height={undefined}
@@ -200,7 +152,7 @@ export default function Home() {
         <div className='my-10 text-center'>Show Instagram</div>
         <div className="grid grid-cols-5 gap-6">
           <div className="">
-            <Image
+            <img
               src={img6}
               alt="img1"
               width={undefined}
@@ -209,7 +161,7 @@ export default function Home() {
             />
           </div>
           <div className="">
-            <Image
+            <img
               src={img7}
               alt="img1"
               width={undefined}
@@ -218,7 +170,7 @@ export default function Home() {
             />
           </div>
           <div className="">
-            <Image
+            <img
               src={img8}
               alt="img1"
               width={undefined}
@@ -227,7 +179,7 @@ export default function Home() {
             />
           </div>
           <div className="">
-            <Image
+            <img
               src={img9}
               alt="img1"
               width={undefined}
@@ -236,7 +188,7 @@ export default function Home() {
             />
           </div>
           <div className="">
-            <Image
+            <img
               src={img10}
               alt="img1"
               width={undefined}
@@ -246,6 +198,8 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
+
+export default LandingPage
