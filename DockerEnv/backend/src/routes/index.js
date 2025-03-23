@@ -1,12 +1,12 @@
 import express from 'express'
-import { productRoute } from './productRoute.js'
+import { landingPageRoute } from './landingPageRoute.js'
 
 
 const Router = express.Router()
 
 /* Buyer APIs */
 
-Router.use('/products', productRoute)
+Router.use('/landing-page', landingPageRoute)
 
 /* Seller APIs */
 
