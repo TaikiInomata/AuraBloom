@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import img from '~/assets/bg-login.png'
 import logo from '~/assets/logo.png'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form'
-import { zodResolver } from "@hookform/resolvers/zod"
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import { EyeIcon, EyeOffIcon, Lock, Mail, User } from 'lucide-react'
@@ -14,25 +14,25 @@ function Register() {
   const formSchema = z.object({
     name: z.string().min(2).max(50),
     email: z.string().min(2).max(50),
-    password: z.string().min(2).max(50),
+    password: z.string().min(2).max(50)
   })
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      email: "",
+      name: '',
+      email: '',
       password: ''
-    },
+    }
   })
-  
+
   function onSubmit(values) {
     console.log(values)
   }
 
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false)
 
-  const toggleVisibility = () => setIsVisible((prevState) => !prevState);
+  const toggleVisibility = () => setIsVisible((prevState) => !prevState)
 
   return (
     <div className='w-[100vw] h-[100vh] grid grid-cols-4 bg-[#F1F3F6]'>
@@ -54,16 +54,16 @@ function Register() {
                     <FormLabel>Name</FormLabel>
                     <FormControl>
                       <div className='flex items-stretch h-fit relative'>
-                        <Input 
-                          placeholder="Nguyen Van A" 
+                        <Input
+                          placeholder="Nguyen Van A"
                           className='pe-20 bg-muted outline-none border-none focus:border-none focus-visible:ring-0'
-                          {...field} 
+                          {...field}
                         />
                         <div className='bg-gray-900 text-white p-2 flex items-center justify-center aspect-square rounded-md absolute right-0' >
                           <User className='w-5 h-4'/>
                         </div>
                       </div>
-                      
+
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -78,16 +78,16 @@ function Register() {
                     <FormLabel>Email address</FormLabel>
                     <FormControl>
                       <div className='flex items-stretch h-fit relative'>
-                        <Input 
-                          placeholder="alex@gmail.com" 
+                        <Input
+                          placeholder="alex@gmail.com"
                           className='pe-20 bg-muted outline-none border-none focus:border-none focus-visible:ring-0'
-                          {...field} 
+                          {...field}
                         />
                         <div className='bg-gray-900 text-white p-2 flex items-center justify-center aspect-square rounded-md absolute right-0' >
                           <Mail className='w-5 h-4'/>
                         </div>
                       </div>
-                      
+
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -101,31 +101,31 @@ function Register() {
                   <FormItem className='mb-2'>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                    <div className="relative flex">
-                      <Input
-                        className="pe-20 bg-muted outline-none border-none focus:border-none focus-visible:ring-0"
-                        placeholder="Enter your password"
-                        type={isVisible ? "text" : "password"}
-                        {...field}
-                      />
-                      <button
-                        className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 right-10 end-0 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
-                        type="button"
-                        onClick={toggleVisibility}
-                        aria-label={isVisible ? "Hide password" : "Show password"}
-                        aria-pressed={isVisible}
-                        aria-controls="password"
-                      >
-                        {isVisible ? (
-                          <EyeOffIcon size={16} aria-hidden="true" />
-                        ) : (
-                          <EyeIcon size={16} aria-hidden="true" />
-                        )}
-                      </button>
-                      <div className='bg-gray-900 text-white p-2 flex items-center justify-center aspect-square rounded-md absolute right-0' >
-                        <Lock className='w-5 h-4'/>
+                      <div className="relative flex">
+                        <Input
+                          className="pe-20 bg-muted outline-none border-none focus:border-none focus-visible:ring-0"
+                          placeholder="Enter your password"
+                          type={isVisible ? 'text' : 'password'}
+                          {...field}
+                        />
+                        <button
+                          className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 right-10 end-0 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+                          type="button"
+                          onClick={toggleVisibility}
+                          aria-label={isVisible ? 'Hide password' : 'Show password'}
+                          aria-pressed={isVisible}
+                          aria-controls="password"
+                        >
+                          {isVisible ? (
+                            <EyeOffIcon size={16} aria-hidden="true" />
+                          ) : (
+                            <EyeIcon size={16} aria-hidden="true" />
+                          )}
+                        </button>
+                        <div className='bg-gray-900 text-white p-2 flex items-center justify-center aspect-square rounded-md absolute right-0' >
+                          <Lock className='w-5 h-4'/>
+                        </div>
                       </div>
-                    </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

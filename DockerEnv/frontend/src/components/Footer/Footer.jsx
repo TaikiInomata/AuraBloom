@@ -1,4 +1,3 @@
-import React from 'react'
 import ClientFooter from '~/components/Footer/ClientFooter'
 import { ACCOUNT_ROLE } from '~/utils/constants'
 

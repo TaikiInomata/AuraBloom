@@ -1,4 +1,3 @@
-import React from 'react'
 import ClientHeader from '~/components/Header/ClientHeader'
 import { ACCOUNT_ROLE } from '~/utils/constants'
 

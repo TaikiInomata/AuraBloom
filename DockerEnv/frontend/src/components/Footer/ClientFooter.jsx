@@ -1,6 +1,3 @@
-import logo from '~/assets/logo.png'
-import footerIcons from '~/assets/footer-icon.png'
-
 function ClientFooter() {
   return (
     <footer className="bg-gray-50 text-black py-10 px-6 md:px-16">

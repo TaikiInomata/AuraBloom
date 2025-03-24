@@ -1,19 +1,8 @@
-import banner from '~/assets/banner.png'
-import img1 from '~/assets/img1.png'
-import img2 from '~/assets/img2.jpg'
-import img3 from '~/assets/img3.jpg'
-import img4 from '~/assets/img4.png'
-import img5 from '~/assets/img5.png'
 import img6 from '~/assets/img6.png'
 import img7 from '~/assets/img7.png'
 import img8 from '~/assets/img8.jpg'
 import img9 from '~/assets/img9.png'
 import img10 from '~/assets/img10.png'
-import product1 from '~/assets/product1.png'
-import product2 from '~/assets/product2.png'
-import product3 from '~/assets/product3.png'
-import product4 from '~/assets/product4.png'
-import product5 from '~/assets/product5.png'
 import { FiPlus } from 'react-icons/fi'
 import { useEffect, useState } from 'react'
 import { fetchLandingPageAPI } from '~/apis'
@@ -97,7 +86,7 @@ function LandingPage() {
         <div className='my-10'>Hôm nay mặc gì?</div>
 
         <div className="grid grid-cols-5 gap-6">
-          {landingPageData?.products?.map(product => 
+          {landingPageData?.products?.map(product =>
             <div className="hover:scale-105 transition-transform hover:ease-in-out hover:duration-300 cursor-pointer hover:shadow-xl rounded-lg overflow-hidden" key={product?._id}>
               <div className="relative w-fit h-fit mb-2">
                 <img
@@ -111,12 +100,12 @@ function LandingPage() {
               </div>
               <div className='px-2 py-1'>
                 <p className='font-medium'>{product?.name}</p>
-              <p className='text-sm'>{product?.avgPrice.toLocaleString('vi-vn')}<sup>đ</sup></p>
+                <p className='text-sm'>{product?.avgPrice.toLocaleString('vi-vn')}<sup>đ</sup></p>
               </div>
-              
+
             </div>
           )}
-          
+
         </div>
 
         <div className="my-10 grid grid-cols-2 gap-6">
