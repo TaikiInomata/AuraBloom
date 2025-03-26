@@ -1,6 +1,10 @@
 /* eslint-disable no-useless-catch */
 
 import Joi from 'joi'
+import unidecode from 'unidecode'
+import { GET_DB } from '~/config/mongodb'
+import { pagingSkipValue } from '~/utils/algorithms'
+import { INVALID_PRODUCT_FILTER_FIELD } from '~/utils/constants'
 import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators'
 
 const PRODUCT_COLLECTION_NAME = 'products'
@@ -35,12 +39,62 @@ const PRODUCT_COLLECTION_SCHEMA = Joi.object({
   _deleted: Joi.boolean().default(false)
 })
 
-// const createProduct = async (productData) => {
 
-// };
+const getProducts = async (page, itemsPerPage, queryFilters) => {
+  try {
+    const queryConditions = [{ _deleted: false }]
+
+    if (queryFilters) {
+      Object.keys(queryFilters).forEach(key => {
+        if (INVALID_PRODUCT_FILTER_FIELD.includes(key)) {
+          delete queryFilters[key]
+        }
+      })
+      Object.keys(queryFilters).forEach(key => {
+        if (key === 'name') {
+          const slug = unidecode(queryFilters[key]).trim().replace(/\s+/g, '-')
+          const regexSlug = new RegExp(slug, 'i')
+
+          queryConditions.push({
+            $or: [
+              { [key]: { $regex: new RegExp(queryFilters[key], 'i') } },
+              { slug: { $regex: regexSlug } }
+            ]
+          })
+        }
+      })
+    }
+    console.log(queryConditions);
+    const query = await GET_DB().collection(PRODUCT_COLLECTION_NAME).aggregate(
+      [
+        { $match: { $and: queryConditions } },
+        // { $sort: { name: 1 } },
+        {
+          $facet: {
+            'queryProducts': [
+              { $skip: pagingSkipValue(page, itemsPerPage) },
+              { $limit: itemsPerPage }
+            ],
+            'queryTotalProducts': [{ $count: 'totalProductsCount' }]
+          }
+        }
+      ],
+      { collation: { locale: 'en' } }
+    ).toArray()
+
+    const res = query[0]
+
+    return {
+      products: res.queryProducts || [],
+      totalProducts: res.queryTotalProducts[0]?.totalProductsCount || 0
+    }
+  } catch (error) { throw new Error(error) }
+}
+
 
 export const productModel = {
   PRODUCT_COLLECTION_NAME,
-  PRODUCT_COLLECTION_SCHEMA
+  PRODUCT_COLLECTION_SCHEMA,
+  getProducts
   // createProduct,
 }
