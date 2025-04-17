@@ -16,6 +16,17 @@ const getProducts = async (page, itemsPerPage, queryFilter) => {
   }
 }
 
+const getDetail = async (productId) => {
+  try {
+    const productDetail = await productModel.findOneById(productId)
+
+    return productDetail
+  } catch (error) {
+    throw error
+  }
+}
+
 export const productService = {
-  getProducts
+  getProducts,
+  getDetail
 }

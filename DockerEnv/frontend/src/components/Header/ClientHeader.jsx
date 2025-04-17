@@ -3,9 +3,15 @@ import { useState } from 'react'
 import { FiHome } from 'react-icons/fi'
 import { LuLogIn } from 'react-icons/lu'
 import { MdOutlineShoppingCart } from 'react-icons/md'
+import { useNavigate } from 'react-router-dom';
 
 function ClientHeader() {
   const [searchValue, setSearchValue] = useState('')
+  const navigate = useNavigate();
+
+  const handleCartClick = () => {
+    navigate('/cart');
+  };
 
   return (
     <div className="border-b-[2px] border-b-gray-300 w-full h-fit">
@@ -38,7 +44,12 @@ function ClientHeader() {
             </div>
             <div className="h-10 border-r border-r-gray-500"></div>
             <div className="flex items-center gap-2 cursor-pointer hover:bg-gray-200 rounded-lg p-2 hover:duration-300 hover:ease-in-out transition-all relative">
-              <MdOutlineShoppingCart className='text-2xl' />
+              <MdOutlineShoppingCart
+                size={30}
+                className="cursor-pointer"
+                onClick={handleCartClick}
+                text-2xl
+              />
               <div className='absolute -top-0.5 -right-0.5 bg-orange-400 text-white rounded-full w-4 h-4 text-xs text-center'>1</div>
             </div>
           </div>

@@ -1,6 +1,10 @@
+import {useState} from 'react'
+
 import Product from '~/components/Product/Product'
+import ProductForm from './AddProductForm'
 
 function ProductList() {
+  const [showForm, setShowForm] = useState(false);
   return (
     <div className="container mx-auto">
       <ul className="p-0 flex items-center justify-between w-full py-4">
@@ -22,6 +26,17 @@ function ProductList() {
 
       <div className="grid grid-cols-4 gap-6 mb-10">
         {[...Array(40)].map((_, index) => (<Product key={index}/>))}
+      </div>
+      <div className="p-6 flex flex-col items-center">
+        <button
+          onClick={() => setShowForm(true)}
+          className="bg-black w-72 text-white px-6 py-3 rounded-xl mb-4"
+
+        >
+        Thêm sản phẩm
+        </button>
+
+        {showForm && <ProductForm onClose={() => setShowForm(false)} />}
       </div>
     </div>
   )
