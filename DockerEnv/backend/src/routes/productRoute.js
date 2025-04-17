@@ -9,4 +9,7 @@ Router.route('/')
   .get(productController.getProducts)
 
 
+Router.route('/:id')
+  .get(productController.getDetail)
+
 export const productRoute = Router
