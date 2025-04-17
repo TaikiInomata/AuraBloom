@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const JewelryPage = () => {
   const [selectedColor, setSelectedColor] = useState('beige')
   const [activeTab, setActiveTab] = useState('description')
+  const [products, setProducts] = useState([])
 
   const colors = [
     { name: 'beige', code: 'bg-[#e2d1c3]' },
@@ -85,58 +86,51 @@ const JewelryPage = () => {
             <p>Đã bán: 55k</p>
           </div>
 
-          <button className="mt-4 px-6 py-3 bg-black text-white rounded-full hover:bg-gray-800">
+          <button className="mt-4 px-6 py-3 bg-black text-white rounded-md hover:bg-gray-800 w-full">
                 Thêm vào giỏ hàng
           </button>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto mt-16">
-        <div className="flex justify-between border-b pb-2 mb-4 max-w-md mx-auto">
-          {['description', 'reviews', 'policy'].map((tab) => (
-            <button
-              key={tab}
-              className={`text-sm font-medium capitalize ${
-                activeTab === tab
-                  ? 'border-b-2 border-black'
-                  : 'text-gray-400'
-              }`}
-              onClick={() => setActiveTab(tab)}
-            >
-              {tab === 'description' && 'Mô tả'}
-              {tab === 'reviews' && 'Đánh giá'}
-              {tab === 'policy' && 'Chính sách'}
-            </button>
-          ))}
-        </div>
-
-        <div className="text-sm text-gray-600 px-2">
-          {activeTab === 'description' && (
-            <p>
-                  Áo được làm bằng chất liệu len nhập khẩu, siêu mềm và siêu ấm. Form
-                  rộng vừa phải, phù hợp mùa đông.
+        <div className="flex justify-between border-t border-b border-slate-700 py-4">
+          <div className="flex-1 text-center">
+            <h3 className="font-bold uppercase text-black mb-2 text-sm">design</h3>
+            <p className="text-sm text-gray-800">
+            Thiết kế mềm nhẹ, ôm gọn, giúp thoải mái di chuyển, dễ dàng giặt giũ
             </p>
-          )}
-          {activeTab === 'reviews' && (
-            <p>Xem phần đánh giá bên dưới 👇</p>
-          )}
-          {activeTab === 'policy' && (
-            <p>Đổi trả trong 7 ngày nếu có lỗi từ nhà sản xuất. Bảo hành 1 năm.</p>
-          )}
+          </div>
+          <div className="flex-1 text-center">
+            <h3 className="font-bold uppercase text-black mb-2 text-sm">quality</h3>
+            <p className="text-sm text-gray-800">
+            Chất lượng cotton dễ thấm hút và thoáng khí giúp nguồn mặc cảm thấy thoải mái
+            </p>
+          </div>
+          <div className="flex-1 text-center">
+            <h3 className="font-bold uppercase text-black mb-2 text-sm">brand</h3>
+            <p className="text-sm text-gray-800">
+            Sản phẩm đến từ thương hiệu nổi tiếng với nền thiết kế hiện đại nhưng vẫn đảm bảo chất cổ điển
+            </p>
+          </div>
         </div>
       </div>
 
       {/* Reviews */}
       <div className="max-w-7xl mx-auto mt-10">
-        <h2 className="text-xl font-semibold mb-4">Đánh giá sản phẩm</h2>
+        <h2 className="text-xl font-semibold">4.0 ★ ★ ★ ★</h2>
+        <h2 className="text-sm font-semibold mb-4">Base on 15.5 reviews</h2>
         {reviews.map((r, idx) => (
-          <div key={idx} className="border-b py-3">
-            <p className="font-medium">{r.name}</p>
-            <p className="text-yellow-500">
-              {'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}
-            </p>
-            <p className="text-sm text-gray-500">{r.date}</p>
-            <p className="text-sm mt-1">{r.comment}</p>
+          <div key={idx} className="flex border-b py-3">
+            <div className="font-medium w-[10%] self-center truncate px-2">{r.name}</div>
+            <div className="w-[80%] px-4">
+              <p className="text-black-800">
+                {'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}
+              </p>
+              <p className="text-sm mt-1">{r.comment}</p>
+            </div>
+            <div className="text-sm text-gray-500 w-[10%] self-center text-right px-2">
+              {r.date}
+            </div>
           </div>
         ))}
       </div>
