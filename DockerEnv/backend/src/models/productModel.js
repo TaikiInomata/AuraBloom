@@ -1,6 +1,7 @@
 /* eslint-disable no-useless-catch */
 
 import Joi from 'joi'
+import { ObjectId } from 'mongodb'
 import unidecode from 'unidecode'
 import { GET_DB } from '~/config/mongodb'
 import { pagingSkipValue } from '~/utils/algorithms'
@@ -64,7 +65,6 @@ const getProducts = async (page, itemsPerPage, queryFilters) => {
         }
       })
     }
-    console.log(queryConditions);
     const query = await GET_DB().collection(PRODUCT_COLLECTION_NAME).aggregate(
       [
         { $match: { $and: queryConditions } },
@@ -91,10 +91,24 @@ const getProducts = async (page, itemsPerPage, queryFilters) => {
   } catch (error) { throw new Error(error) }
 }
 
+const findOneById = async (id) => {
+  try {
+    const res = await GET_DB().collection(PRODUCT_COLLECTION_NAME).findOne(
+      {
+        $and: [
+          { _id: new ObjectId(id) },
+          { _deleted: false }]
+      })
+    return res
+  } catch (error) {
+    throw new Error(error)
+  }
+}
 
 export const productModel = {
   PRODUCT_COLLECTION_NAME,
   PRODUCT_COLLECTION_SCHEMA,
-  getProducts
+  getProducts,
+  findOneById
   // createProduct,
 }
