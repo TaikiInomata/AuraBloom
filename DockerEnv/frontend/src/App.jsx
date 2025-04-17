@@ -4,6 +4,7 @@ import LandingPage from '~/pages/Client/LandingPage/LandingPage'
 import ProductList from '~/pages/Client/ProductList/ProductList'
 import Login from '~/pages/Auth/Login'
 import Register from '~/pages/Auth/Register'
+import Cart from '~/pages/Client/Cart/CartPage'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Route path='/' element={<ClientLayout />}>
         <Route index element={<LandingPage />} />
         <Route path='products' element={<ProductList />} />
+        <Route path='cart' element={<Cart />} />
       </Route>
     </Routes>
   )
