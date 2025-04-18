@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import productImg from '~/assets/productcard.png';
+/* eslint-disable no-console */
+import { useState } from 'react'
+import productImg from '~/assets/productcard.png'
 
 const ProductForm = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -9,22 +10,22 @@ const ProductForm = ({ onClose }) => {
     origin: '',
     producer: '',
     price: ''
-  });
+  })
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
       [name]: value
-    }));
-  };
+    }))
+  }
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form data submitted:', formData);
-    alert('Sản phẩm đã được thêm!');
-    onClose();
-  };
+    e.preventDefault()
+    console.log('Form data submitted:', formData)
+    alert('Sản phẩm đã được thêm!')
+    onClose()
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -86,44 +87,44 @@ const ProductForm = ({ onClose }) => {
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <label className="w-1/3">Thông tin sản phẩm:</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 name="productInfo"
-                className="border px-2 py-1 flex-1" 
-                required 
+                className="border px-2 py-1 flex-1"
+                required
                 value={formData.productInfo}
                 onChange={handleChange}
               />
             </div>
             <div className="flex justify-between items-center">
               <label className="w-1/3">Loại:</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 name="productType"
-                className="border px-2 py-1 flex-1" 
-                required 
+                className="border px-2 py-1 flex-1"
+                required
                 value={formData.productType}
                 onChange={handleChange}
               />
             </div>
             <div className="flex justify-between items-center">
               <label className="w-1/3">Xuất xứ:</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 name="origin"
-                className="border px-2 py-1 flex-1" 
-                required 
+                className="border px-2 py-1 flex-1"
+                required
                 value={formData.origin}
                 onChange={handleChange}
               />
             </div>
             <div className="flex justify-between items-center">
               <label className="w-1/3">Nghệ nhân:</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 name="producer"
-                className="border px-2 py-1 flex-1" 
-                required 
+                className="border px-2 py-1 flex-1"
+                required
                 value={formData.producer}
                 onChange={handleChange}
               />
@@ -139,7 +140,7 @@ const ProductForm = ({ onClose }) => {
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProductForm;
+export default ProductForm

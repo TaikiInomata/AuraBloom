@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import ProductImg from '~/assets/productcard.png';
+import React, { useState } from 'react'
+import ProductImg from '~/assets/productcard.png'
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([
     { id: 1, img: ProductImg, quantity: 1, price: 100000 },
     { id: 2, img: ProductImg, quantity: 2, price: 150000 },
     { id: 3, img: ProductImg, quantity: 2, price: 125000 }
-  ]);
+  ])
 
   const otherProducts = [
     { id: 101, name: 'Sản phẩm A', img: ProductImg },
@@ -14,7 +14,7 @@ const CartPage = () => {
     { id: 103, name: 'Sản phẩm C', img: ProductImg },
     { id: 104, name: 'Sản phẩm D', img: ProductImg },
     { id: 105, name: 'Sản phẩm E', img: ProductImg }
-  ];
+  ]
 
   const [formData, setFormData] = useState({
     customer: '',
@@ -23,39 +23,39 @@ const CartPage = () => {
     idcode: '',
     payby: 'cash',
     discount: ''
-  });
+  })
 
   const handleQuantityChange = (id, quantity) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
         item.id === id ? { ...item, quantity: Math.max(1, quantity) } : item
       )
-    );
-  };
+    )
+  }
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-  
+    const { name, value } = e.target
+
     if (name === 'phone') {
-      const numericValue = value.replace(/\D/g, '').slice(0, 10);
+      const numericValue = value.replace(/\D/g, '').slice(0, 10)
       setFormData((prevData) => ({
         ...prevData,
-        [name]: numericValue,
-      }));
+        [name]: numericValue
+      }))
     } else {
       setFormData((prevData) => ({
         ...prevData,
-        [name]: value,
-      }));
+        [name]: value
+      }))
     }
-  };
+  }
 
-  const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0)
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData, 'Total:', totalPrice);
-  };
+    e.preventDefault()
+    console.log('Form submitted:', formData, 'Total:', totalPrice)
+  }
 
   return (
     <div className="max-w-screen-lg mx-auto p-6">
@@ -130,111 +130,111 @@ const CartPage = () => {
       <div className="flex justify-end mt-10">
         <form onSubmit={handleSubmit} className="w-full max-w-xl border rounded-xl p-6 shadow-md space-y-6">
 
-        <h3 className="text-2xl font-bold mb-4">Thông tin thanh toán</h3>
+          <h3 className="text-2xl font-bold mb-4">Thông tin thanh toán</h3>
 
-        <div>
-          <label className="block text-lg font-medium mb-1">Họ tên khách hàng</label>
-          <input
-            type="text"
-            name="customer"
-            value={formData.customer}
-            onChange={handleInputChange}
-            placeholder="Nhập họ tên"
-            className="border px-4 py-2 rounded-md w-full"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-lg font-medium mb-1">Số điện thoại</label>
-          <input
-            type="text"
-            name="phone"
-            value={formData.phone}
-            onChange={handleInputChange}
-            placeholder="Nhập số điện thoại"
-            className="border px-4 py-2 rounded-md w-full"
-            required
-            inputMode="numeric"
-          />
-        </div>
-
-        <div>
-          <label className="block text-lg font-medium mb-1">Địa chỉ</label>
-          <input
-            type="text"
-            name="address"
-            value={formData.address}
-            onChange={handleInputChange}
-            placeholder="Nhập địa chỉ"
-            className="border px-4 py-2 rounded-md w-full"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-lg font-medium mb-1">Mã số định danh / CCCD</label>
-          <input
-            type="text"
-            name="idcode"
-            value={formData.idcode}
-            onChange={handleInputChange}
-            placeholder="Nhập CCCD hoặc mã số định danh"
-            className="border px-4 py-2 rounded-md w-full"
-          />
-        </div>
-
-        <div>
-          <label className="block text-lg font-medium mb-1">Mã giảm giá (nếu có)</label>
-          <input
-            type="text"
-            name="discount"
-            value={formData.discount}
-            onChange={handleInputChange}
-            placeholder="Nhập mã giảm giá"
-            className="border px-4 py-2 rounded-md w-full"
-          />
-        </div>
-
-        <div>
-          <label className="block text-lg font-medium mb-2">Hình thức thanh toán</label>
-          <div className="flex items-center gap-6">
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="payby"
-                value="cash"
-                checked={formData.payby === 'cash'}
-                onChange={handleInputChange}
-              />
-              Tiền mặt
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="payby"
-                value="transfer"
-                checked={formData.payby === 'transfer'}
-                onChange={handleInputChange}
-              />
-              Chuyển khoản
-            </label>
+          <div>
+            <label className="block text-lg font-medium mb-1">Họ tên khách hàng</label>
+            <input
+              type="text"
+              name="customer"
+              value={formData.customer}
+              onChange={handleInputChange}
+              placeholder="Nhập họ tên"
+              className="border px-4 py-2 rounded-md w-full"
+              required
+            />
           </div>
-        </div>
 
-        <div className="text-right text-xl font-semibold">
+          <div>
+            <label className="block text-lg font-medium mb-1">Số điện thoại</label>
+            <input
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+              placeholder="Nhập số điện thoại"
+              className="border px-4 py-2 rounded-md w-full"
+              required
+              inputMode="numeric"
+            />
+          </div>
+
+          <div>
+            <label className="block text-lg font-medium mb-1">Địa chỉ</label>
+            <input
+              type="text"
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
+              placeholder="Nhập địa chỉ"
+              className="border px-4 py-2 rounded-md w-full"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-lg font-medium mb-1">Mã số định danh / CCCD</label>
+            <input
+              type="text"
+              name="idcode"
+              value={formData.idcode}
+              onChange={handleInputChange}
+              placeholder="Nhập CCCD hoặc mã số định danh"
+              className="border px-4 py-2 rounded-md w-full"
+            />
+          </div>
+
+          <div>
+            <label className="block text-lg font-medium mb-1">Mã giảm giá (nếu có)</label>
+            <input
+              type="text"
+              name="discount"
+              value={formData.discount}
+              onChange={handleInputChange}
+              placeholder="Nhập mã giảm giá"
+              className="border px-4 py-2 rounded-md w-full"
+            />
+          </div>
+
+          <div>
+            <label className="block text-lg font-medium mb-2">Hình thức thanh toán</label>
+            <div className="flex items-center gap-6">
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="payby"
+                  value="cash"
+                  checked={formData.payby === 'cash'}
+                  onChange={handleInputChange}
+                />
+              Tiền mặt
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="payby"
+                  value="transfer"
+                  checked={formData.payby === 'transfer'}
+                  onChange={handleInputChange}
+                />
+              Chuyển khoản
+              </label>
+            </div>
+          </div>
+
+          <div className="text-right text-xl font-semibold">
           Tạm tính: {totalPrice.toLocaleString()} VNĐ
-        </div>
+          </div>
 
-        <div className="text-center mt-4">
-          <button
-            type="submit"
-            className="px-8 py-3 w-3/4 bg-black text-white text-lg rounded-full hover:bg-gray-500"
-          >
+          <div className="text-center mt-4">
+            <button
+              type="submit"
+              className="px-8 py-3 w-3/4 bg-black text-white text-lg rounded-full hover:bg-gray-500"
+            >
             Confirm
-          </button>
-        </div>
-      </form>
+            </button>
+          </div>
+        </form>
       </div>
 
       <div className="mt-16 px-6">
@@ -267,7 +267,7 @@ const CartPage = () => {
       </div>
 
     </div>
-  );
-};
+  )
+}
 
-export default CartPage;
+export default CartPage
