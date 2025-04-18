@@ -8,13 +8,17 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import { EyeIcon, EyeOffIcon, Lock, Mail, User } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { EMAIL_RULE, EMAIL_RULE_MESSAGE, FIELD_REQUIRED_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
+import { registerUserAPI } from '~/apis'
 
 function Register() {
+  const navigate = useNavigate()
+
   const formSchema = z.object({
-    name: z.string().min(2).max(50),
-    email: z.string().min(2).max(50),
-    password: z.string().min(2).max(50)
+    name: z.string().min(1, FIELD_REQUIRED_MESSAGE).max(50),
+    email: z.string().min(1, FIELD_REQUIRED_MESSAGE).max(50).regex(EMAIL_RULE, EMAIL_RULE_MESSAGE),
+    password: z.string().min(1, FIELD_REQUIRED_MESSAGE).max(50).regex(PASSWORD_RULE, PASSWORD_RULE_MESSAGE)
   })
 
   const form = useForm({
@@ -27,7 +31,11 @@ function Register() {
   })
 
   function onSubmit(values) {
-    console.log(values)
+    registerUserAPI(values).then((res) => {
+      if (!res.error) {
+        navigate('/login')
+      }
+    })
   }
 
   const [isVisible, setIsVisible] = useState(false)
@@ -38,7 +46,7 @@ function Register() {
     <div className='w-[100vw] h-[100vh] grid grid-cols-4 bg-[#F1F3F6]'>
       <div className='col-span-1 h-full bg-white flex items-center justify-center' style={{ boxShadow: '24.23px 0px 50.49px 0px #0000000D' }}>
         <div className='w-full px-6'>
-          <div className='flex items-center justify-center gap-6 mb-2'>
+          <div className='flex items-center justify-center gap-6 mb-2 cursor-pointer' onClick={() => navigate('/')}>
             <img src={logo} alt="" className='w-6' />
             <span className='text-3xl'>PNJ</span>
           </div>
@@ -143,7 +151,7 @@ function Register() {
             <div className='h-px border-t-[2px] border-gray-300 w-full'></div>
           </div>
 
-          <Button variant='outline' className='w-full border-gray-800'><Link to='/login'>Login now</Link></Button>
+          <Link to='/login'><Button variant='outline' className='w-full border-gray-800'>Login now</Button></Link>
 
         </div>
       </div>

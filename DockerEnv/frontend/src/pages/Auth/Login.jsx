@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import img from '~/assets/bg-login.png'
@@ -8,12 +8,16 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import { EyeIcon, EyeOffIcon, Lock, Mail } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { loginUserAPI } from '~/apis'
+import { EMAIL_RULE, EMAIL_RULE_MESSAGE, FIELD_REQUIRED_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
 
 function Login() {
+  const navigate = useNavigate()
+
   const formSchema = z.object({
-    email: z.string().min(2).max(50),
-    password: z.string().min(2).max(50)
+    email: z.string().min(1, FIELD_REQUIRED_MESSAGE).max(50).regex(EMAIL_RULE, EMAIL_RULE_MESSAGE),
+    password: z.string().min(1, FIELD_REQUIRED_MESSAGE).max(50).regex(PASSWORD_RULE, PASSWORD_RULE_MESSAGE)
   })
 
   const form = useForm({
@@ -25,7 +29,11 @@ function Login() {
   })
 
   function onSubmit(values) {
-    console.log(values)
+    loginUserAPI(values).then((res) => {
+      if (!res.error) {
+        navigate('/')
+      }
+    })
   }
 
   const [isVisible, setIsVisible] = useState(false)
@@ -36,7 +44,7 @@ function Login() {
     <div className='w-[100vw] h-[100vh] grid grid-cols-4 bg-[#F1F3F6]'>
       <div className='col-span-1 h-full bg-white flex items-center justify-center' style={{ boxShadow: '24.23px 0px 50.49px 0px #0000000D' }}>
         <div className='w-full px-6'>
-          <div className='flex items-center justify-center gap-6 mb-2'>
+          <div className='flex items-center justify-center gap-6 mb-2 cursor-pointer' onClick={() => navigate('/')}>
             <img src={logo} alt="" className='w-6' />
             <span className='text-3xl'>PNJ</span>
           </div>
@@ -48,8 +56,8 @@ function Login() {
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormItem className='mb-4'>
-                    <FormLabel>Email address</FormLabel>
+                  <FormItem className='mb-6'>
+                    <FormLabel className='font-semibold'>Email address</FormLabel>
                     <FormControl>
                       <div className='flex items-stretch h-fit relative'>
                         <Input
@@ -73,7 +81,7 @@ function Login() {
                 name="password"
                 render={({ field }) => (
                   <FormItem className='mb-2'>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel className='font-semibold'>Password</FormLabel>
                     <FormControl>
                       <div className="relative flex">
                         <Input
@@ -118,7 +126,7 @@ function Login() {
             <div className='h-px border-t-[2px] border-gray-300 w-full'></div>
           </div>
 
-          <Button variant='outline' className='w-full border-gray-800'><Link to='/register'>Signup now</Link></Button>
+          <Link to='/register'><Button variant='outline' className='w-full border-gray-800'>Signup now</Button></Link>
 
         </div>
       </div>
