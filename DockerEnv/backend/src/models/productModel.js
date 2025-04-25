@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-catch */
 
 import Joi from 'joi'
 import { ObjectId } from 'mongodb'
