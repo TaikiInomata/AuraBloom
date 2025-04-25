@@ -11,9 +11,12 @@ import { EyeIcon, EyeOffIcon, Lock, Mail, User } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { EMAIL_RULE, EMAIL_RULE_MESSAGE, FIELD_REQUIRED_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
 import { registerUserAPI } from '~/apis'
+import { useToast } from '~/hooks/use-toast'
+import { ACCOUNT_ROLE } from '~/utils/constants'
 
 function Register() {
   const navigate = useNavigate()
+  const { toast } = useToast()
 
   const formSchema = z.object({
     name: z.string().min(1, FIELD_REQUIRED_MESSAGE).max(50),
@@ -31,8 +34,13 @@ function Register() {
   })
 
   function onSubmit(values) {
-    registerUserAPI(values).then((res) => {
+    registerUserAPI({ ...values, role: ACCOUNT_ROLE.CLIENT }).then((res) => {
       if (!res.error) {
+        toast({
+          variant: 'success',
+          title: 'Thông báo',
+          description: 'Đăng ký thành công! Vui lòng đăng nhập để tiếp tục.'
+        })
         navigate('/login')
       }
     })

@@ -11,10 +11,10 @@ const login = async (reqBody) => {
     const password = reqBody.password
 
     const existUser = await userModel.findOneByEmail(email)
-    if (!existUser) throw new ApiError(StatusCodes.UNAUTHORIZED, 'Tài khoản không tồn tại!')
+    if (!existUser) throw new ApiError(StatusCodes.NOT_FOUND, 'Tài khoản không tồn tại!')
 
     const isMatchPassword = bcryptjs.compareSync(password, existUser.password)
-    if (!isMatchPassword) throw new ApiError(StatusCodes.UNAUTHORIZED, 'Mật khẩu không chính xác!')
+    if (!isMatchPassword) throw new ApiError(StatusCodes.CONFLICT, 'Mật khẩu không chính xác!')
 
     return existUser
   }

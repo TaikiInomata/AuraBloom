@@ -11,9 +11,11 @@ import { EyeIcon, EyeOffIcon, Lock, Mail } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { loginUserAPI } from '~/apis'
 import { EMAIL_RULE, EMAIL_RULE_MESSAGE, FIELD_REQUIRED_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
+import { useToast } from '~/hooks/use-toast'
 
 function Login() {
   const navigate = useNavigate()
+  const { toast } = useToast()
 
   const formSchema = z.object({
     email: z.string().min(1, FIELD_REQUIRED_MESSAGE).max(50).regex(EMAIL_RULE, EMAIL_RULE_MESSAGE),
@@ -31,6 +33,12 @@ function Login() {
   function onSubmit(values) {
     loginUserAPI(values).then((res) => {
       if (!res.error) {
+        toast({
+          variant: 'success',
+          description: 'Đăng nhập thành công!'
+        })
+        const currentUser = res
+        localStorage.setItem('currentUser', JSON.stringify(currentUser))
         navigate('/')
       }
     })
