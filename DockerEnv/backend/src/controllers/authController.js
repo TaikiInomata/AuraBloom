@@ -18,24 +18,24 @@ const login = async (req, res, next) => {
 
     const result = await authService.login(req.body)
 
-    res.cookie('accessToken', res.accessToken, {
+    res.cookie('accessToken', result.accessToken, {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
       maxAge: ms('14 days')
     })
 
-    res.cookie('refreshToken', res.refreshToken, {
+    res.cookie('refreshToken', result.refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
       maxAge: ms('14 days')
     })
 
-    delete res['accessToken']
-    delete res['refreshToken']
+    delete result['accessToken']
+    delete result['refreshToken']
 
-    res.status(StatusCodes.OK).json(res)
+    res.status(StatusCodes.OK).json(result)
   } catch (error) {
     next(error)
   }
