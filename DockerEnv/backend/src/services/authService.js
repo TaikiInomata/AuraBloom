@@ -13,7 +13,7 @@ const login = async (reqBody) => {
     const password = reqBody.password
 
     const existUser = await userModel.findOneByEmail(email)
-    if (!existUser) throw new ApiError(StatusCodes.UNAUTHORIZED, 'Tài khoản không tồn tại!')
+    if (!existUser) throw new ApiError(StatusCodes.NOT_FOUND, 'Tài khoản không tồn tại!')
 
     const isMatchPassword = bcryptjs.compareSync(password, existUser.password)
     if (!isMatchPassword) throw new ApiError(StatusCodes.NOT_ACCEPTABLE, 'Mật khẩu không chính xác!')
@@ -27,6 +27,7 @@ const login = async (reqBody) => {
       userInfo,
       env.ACCESS_TOKEN_SECRET_SIGNATURE,
       env.ACCESS_TOKEN_LIFE
+      // 5
     )
 
     const refreshToken = await JwtProvider.generateToken(

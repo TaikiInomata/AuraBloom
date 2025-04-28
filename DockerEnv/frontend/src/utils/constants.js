@@ -1,8 +1,8 @@
 export const API_ROOT = 'http://localhost:8017'
 
 export const ACCOUNT_ROLE = {
-  CLIENT: 'client',
-  ADMIN: 'admin'
+  CLIENT: 'buyer',
+  ADMIN: 'seller'
 }
 
 export const DEFAULT_ITEMS_PER_PAGE = 40

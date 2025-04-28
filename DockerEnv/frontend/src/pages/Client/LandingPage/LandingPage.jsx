@@ -39,11 +39,10 @@ function LandingPage() {
           className="w-full h-full object-cover"
         />
 
-
-        <div className='container mx-auto relative -top-45'>
+        {/* <div className='container mx-auto relative -top-44'>
           <p className='text-white text-2xl'>Elevate Your Style<br />Timeless Fashion, Sustainable<br />Choices</p>
           <button className='bg-[#F8F9FA] px-4 py-2 mt-4'>Shop Now</button>
-        </div>
+        </div> */}
       </div>
 
       <div className="container mx-auto my-6">
@@ -146,7 +145,7 @@ function LandingPage() {
               alt="img1"
               width={undefined}
               height={undefined}
-              className="h-[250px] object-cover"
+              className="h-[250px] object-cover w-full"
             />
           </div>
           <div className="">
@@ -155,7 +154,7 @@ function LandingPage() {
               alt="img1"
               width={undefined}
               height={undefined}
-              className="h-[250px] object-cover"
+              className="h-[250px] object-cover w-full"
             />
           </div>
           <div className="">
@@ -164,7 +163,7 @@ function LandingPage() {
               alt="img1"
               width={undefined}
               height={undefined}
-              className="h-[250px] object-cover"
+              className="h-[250px] object-cover w-full"
             />
           </div>
           <div className="">
@@ -173,7 +172,7 @@ function LandingPage() {
               alt="img1"
               width={undefined}
               height={undefined}
-              className="h-[250px] object-cover"
+              className="h-[250px] object-cover w-full"
             />
           </div>
           <div className="">
@@ -182,7 +181,7 @@ function LandingPage() {
               alt="img1"
               width={undefined}
               height={undefined}
-              className="h-[250px] object-cover"
+              className="h-[250px] object-cover w-full"
             />
           </div>
         </div>
