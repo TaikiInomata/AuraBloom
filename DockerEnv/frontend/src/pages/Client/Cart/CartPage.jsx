@@ -1,12 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ProductImg from '~/assets/productcard.png'
+import close_icon from '~/assets/close_icon.svg'
+import { fetchCartProductList, createOrder } from '~/apis'
 
 const CartPage = () => {
-  const [cartItems, setCartItems] = useState([
-    { id: 1, img: ProductImg, quantity: 1, price: 100000 },
-    { id: 2, img: ProductImg, quantity: 2, price: 150000 },
-    { id: 3, img: ProductImg, quantity: 2, price: 125000 }
-  ])
+  const [cartItems, setCartItems] = useState([])
+
+  const [totalPrice, setTotalPrice] = useState(0)
+
+  // test using local storage
+  localStorage.setItem('cart', JSON.stringify({
+    ids: ['67dbd7949b94df7a8a9c6592', '67dbd7949b94df7a8a9c658f', '67dbd7949b94df7a8a9c6590'],
+    quantity: [1, 2, 5]
+  }))
 
   const otherProducts = [
     { id: 101, name: 'Sản phẩm A', img: ProductImg },
@@ -16,20 +22,76 @@ const CartPage = () => {
     { id: 105, name: 'Sản phẩm E', img: ProductImg }
   ]
 
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      try {
+        const storedData = localStorage.getItem('cart')
+        if (!storedData) {
+          return
+        }
+
+        const parsed = JSON.parse(storedData)
+        if (!parsed.ids || !Array.isArray(parsed.ids) || parsed.ids.length === 0) {
+          return
+        }
+
+        const response = await fetchCartProductList({'ids':parsed.ids})
+
+        const loadedItems = response.data.map(product => {
+          const index = parsed.ids.findIndex(id => id === product._id)
+          const quantity = parsed.quantity?.[index] ?? 1
+
+          return {
+            ...product,
+            id: product._id,
+            img: product.avatar || ProductImg,
+            quantity,
+            price: product.avgPrice
+          }
+        })
+
+        setCartItems(loadedItems)
+      } catch (error) {
+        alert('Failed to fetch cart products', error)
+      }
+    }
+
+    fetchCartItems()
+  }, [])
+
   const [formData, setFormData] = useState({
     customer: '',
     address: '',
     phone: '',
     idcode: '',
     payby: 'cash',
-    discount: ''
+    discount: '',
+    userId: null
   })
+
+  useEffect(() => {
+    const newTotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0)
+    setTotalPrice(newTotal)
+    const cartData = {
+      ids: cartItems.map(item => item.id),
+      quantity: cartItems.map(item => item.quantity)
+    }
+    localStorage.setItem('cart', JSON.stringify(cartData))
+  }, [cartItems])
 
   const handleQuantityChange = (id, quantity) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
         item.id === id ? { ...item, quantity: Math.max(1, quantity) } : item
       )
+    )
+
+    setTotalPrice(
+      cartItems.reduce((total, item) => {
+        const price = item.price || 0
+        const qty = item.quantity || 0
+        return total + price * qty
+      }, 0)
     )
   }
 
@@ -50,11 +112,48 @@ const CartPage = () => {
     }
   }
 
-  const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0)
+  const handleRemoveItem = (idToRemove) => {
+    const updatedItems = cartItems.filter(item => item.id !== idToRemove)
+    setCartItems(updatedItems)
 
-  const handleSubmit = (e) => {
+    const cartData = JSON.parse(localStorage.getItem('cart') || '{}')
+    const index = cartData.ids?.findIndex(id => id === idToRemove)
+    if (index > -1) {
+      cartData.ids.splice(index, 1)
+      cartData.quantity.splice(index, 1)
+      localStorage.setItem('cart', JSON.stringify(cartData))
+    }
+
+    const newTotal = updatedItems.reduce((total, item) => total + item.price * item.quantity, 0)
+    setTotalPrice(newTotal)
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('Form submitted:', formData, 'Total:', totalPrice)
+
+    const orderData = {
+      products: cartItems.map((item) => ({
+        id: item.id.toString(),
+        quantity: item.quantity
+      })),
+      userId: formData.userId,
+      identityNumber: formData.idcode,
+      address: formData.address,
+      phone: formData.phone,
+      name: formData.customer,
+      paymentMethod: formData.payby,
+      totalPrice: totalPrice
+    }
+    try {
+      console.log(orderData)
+      const res = await createOrder(orderData)
+      if (res?.data?.success) {
+        setCartItems([])
+        alert('Đặt hàng thành công!')
+      }
+    } catch (error) {
+      alert(error)
+    }
   }
 
   return (
@@ -83,11 +182,11 @@ const CartPage = () => {
                           alt="Product"
                           className="w-24 h-28 object-cover border rounded-md"
                         />
-                        <span className="ml-6 text-lg">Sản phẩm {item.id}</span>
+                        <span className="ml-6 text-lg">{item.name}</span>
                       </div>
                     </td>
                     <td className="px-8 py-6 text-xl font-medium text-gray-900">
-                      {item.price.toLocaleString()} VNĐ
+                      {item.avgPrice?.toLocaleString()} VNĐ
                     </td>
                     <td className="px-8 py-6 text-base font-medium text-gray-900">
                       <div className="flex border rounded-2xl items-center border-black">
@@ -112,7 +211,14 @@ const CartPage = () => {
                       </div>
                     </td>
                     <td className="px-8 py-6 text-xl font-medium text-gray-900">
-                      {(item.price * item.quantity).toLocaleString()} VNĐ
+                      {`${(item.price*item.quantity)?.toLocaleString()} VNĐ`}
+                    </td>
+                    <td>
+                      <button onClick={() => handleRemoveItem(item.id)} className="w-12 h-12">
+                        <img
+                          src={close_icon}
+                        />
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -124,7 +230,7 @@ const CartPage = () => {
 
       <div className="flex justify-between items-center mt-8 p-6 border-t">
         <span className="text-2xl font-semibold">Tổng cộng:</span>
-        <span className="text-2xl font-semibold">{totalPrice.toLocaleString()} VNĐ</span>
+        <span className="text-2xl font-semibold">{totalPrice?.toLocaleString()} VNĐ</span>
       </div>
 
       <div className="flex justify-end mt-10">
@@ -223,7 +329,7 @@ const CartPage = () => {
           </div>
 
           <div className="text-right text-xl font-semibold">
-          Tạm tính: {totalPrice.toLocaleString()} VNĐ
+          Tạm tính: {totalPrice?.toLocaleString()} VNĐ
           </div>
 
           <div className="text-center mt-4">

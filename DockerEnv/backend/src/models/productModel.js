@@ -104,10 +104,40 @@ const findOneById = async (id) => {
   }
 }
 
+const createProduct = async (data) => {
+  try {
+    const validData = await PRODUCT_COLLECTION_SCHEMA.validateAsync(data, { abortEarly: false })
+
+    const res = await GET_DB().collection(PRODUCT_COLLECTION_NAME).insertOne(validData)
+
+    return await findOneById(res.insertedId)
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+const getProductList = async (ids) => {
+  try {
+    const objectIds = ids.map(id => new ObjectId(id))
+
+    const products = await GET_DB().collection(PRODUCT_COLLECTION_NAME).find(
+      {
+        _id: { $in: objectIds },
+        _deleted: false
+      }
+    ).toArray()
+
+    return products
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 export const productModel = {
   PRODUCT_COLLECTION_NAME,
   PRODUCT_COLLECTION_SCHEMA,
   getProducts,
-  findOneById
-  // createProduct,
+  findOneById,
+  createProduct,
+  getProductList
 }

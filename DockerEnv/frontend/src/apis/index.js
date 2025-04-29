@@ -27,3 +27,15 @@ export const refreshTokenAPI = async () => {
 export const logoutUserAPI = async () => {
   return await authorizedAxiosInstance.delete(`${API_ROOT}/v1/auth/logout`)
 }
+
+export const createProductAPI = async (data) => {
+  return await authorizedAxiosInstance.post(`${API_ROOT}/v1/products/`, data)
+}
+
+export const createOrder = async (data) => {
+  return await authorizedAxiosInstance.post(`${API_ROOT}/v1/order/`, data)
+}
+
+export const fetchCartProductList = async (idList) => {
+  return await authorizedAxiosInstance.post(`${API_ROOT}/v1/products/list`, idList)
+}
