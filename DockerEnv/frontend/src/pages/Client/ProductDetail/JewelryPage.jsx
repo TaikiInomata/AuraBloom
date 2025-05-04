@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+import { useParams } from 'react-router-dom'
+import { fetchProductDetailAPI } from '~/apis'
 
 const JewelryPage = () => {
   const [selectedColor, setSelectedColor] = useState('beige')
   const [activeTab, setActiveTab] = useState('description')
-  const [products, setProducts] = useState([])
+  const [product, setProduct] = useState(null)
+  const { id } = useParams()
 
   const colors = [
     { name: 'beige', code: 'bg-[#e2d1c3]' },
@@ -35,33 +39,51 @@ const JewelryPage = () => {
   ]
 
   const suggested = Array(4).fill({
-    name: 'Áo giống vậy',
     image: 'https://pos.nvncdn.com/2865a9-85186/ps/20240128_hMm4MN1XOD.jpeg'
   })
+
+  const [productDetail, setProductDetail] = useState()
+  useEffect(() => {
+    fetchProductDetailAPI(id).then(data => setProductDetail(data))
+  }, [id])
 
   return (
     <div className="bg-[#f8fcff] text-gray-800 font-sans p-6 min-h-screen">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
         <div className="flex flex-col gap-4">
-          <img src={images[0]} alt="Main" className="rounded-lg w-full" />
+          {productDetail && (
+            <img src={productDetail?.avatar} alt="Main" className="rounded-lg w-full" />
+          )}
           <div className="grid grid-cols-4 gap-2">
-            {images.map((img, idx) => (
-              <img
-                key={idx}
-                src={img}
-                alt={`thumb-${idx}`}
-                className="rounded-lg"
-              />
-            ))}
+            <img
+              src={productDetail?.avatar}
+              alt={''}
+              className="rounded-lg"
+            />
+            <img
+              src={productDetail?.avatar}
+              alt={''}
+              className="rounded-lg"
+            />
+            <img
+              src={productDetail?.avatar}
+              alt={''}
+              className="rounded-lg"
+            />
+            <img
+              src={productDetail?.avatar}
+              alt={''}
+              className="rounded-lg"
+            />
           </div>
         </div>
 
         <div className="space-y-4">
           <p className="text-sm text-gray-500">Quần áo / sweater</p>
           <h1 className="text-2xl font-semibold">
-                Áo sweater mang ấm hơn hẳn khi trong vòng tay của crush
+            {productDetail?.name}
           </h1>
-          <p className="text-xl font-semibold text-gray-800">55.000.000</p>
+          <p className="text-xl font-semibold text-gray-800">{productDetail?.avgPrice.toLocaleString('vi-VN')} đ</p>
 
           <div>
             <p className="text-sm mb-1">Color</p>
@@ -79,11 +101,9 @@ const JewelryPage = () => {
           </div>
 
           <div className="text-sm text-gray-600 leading-relaxed">
-            <p>Thông tin sản phẩm: ahjdsjabsdjabsdbakd</p>
-            <p>Loại: Vàng</p>
-            <p>Xuất xứ: Thụy Điển</p>
-            <p>Nghệ nhân: Việt Khiêm</p>
-            <p>Đã bán: 55k</p>
+            <p>Thông tin sản phẩm: {productDetail?.description}</p>
+            <p>Thương hiệu: {productDetail?.brand}</p>
+            <p>Đã bán: {productDetail?.sold}</p>
           </div>
 
           <button className="mt-4 px-6 py-3 bg-black text-white rounded-md hover:bg-gray-800 w-full">
@@ -117,7 +137,7 @@ const JewelryPage = () => {
 
       {/* Reviews */}
       <div className="max-w-7xl mx-auto mt-10">
-        <h2 className="text-xl font-semibold">4.0 ★ ★ ★ ★</h2>
+        <h2 className="text-xl font-semibold">{productDetail?.rating}</h2>
         <h2 className="text-sm font-semibold mb-4">Base on 15.5 reviews</h2>
         {reviews.map((r, idx) => (
           <div key={idx} className="flex border-b py-3">
@@ -135,14 +155,13 @@ const JewelryPage = () => {
         ))}
       </div>
 
-      {/* Suggestions */}
       <div className="max-w-7xl mx-auto mt-10">
         <h2 className="text-xl font-semibold mb-4">Sản phẩm gợi ý</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {suggested.map((p, idx) => (
+          {suggested.map((item, idx) => (
             <div key={idx} className="text-center">
-              <img src={p.image} alt={p.name} className="rounded-lg mx-auto" />
-              <p className="text-sm mt-2">{p.name}</p>
+              <img src={item.image} alt={item.name} className="rounded-lg mx-auto" />
+              <p className="text-sm mt-2">{item.name}</p>
             </div>
           ))}
         </div>

@@ -1,10 +1,18 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 
 import Product from '~/components/Product/Product'
 import ProductForm from './AddProductForm'
+import { fetchProductListAPI } from '~/apis'
+
 
 function ProductList() {
   const [showForm, setShowForm] = useState(false);
+  const [productList, setProductList] = useState([]);
+  
+  useEffect(() => {
+    fetchProductListAPI().then(data => setProductList(data.products))
+  }, [])
+
   return (
     <div className="container mx-auto">
       <ul className="p-0 flex items-center justify-between w-full py-4">
@@ -25,7 +33,7 @@ function ProductList() {
       </ul>
 
       <div className="grid grid-cols-4 gap-6 mb-10">
-        {[...Array(40)].map((_, index) => (<Product key={index}/>))}
+        {productList.map((product, index) => (<Product key={index} product={product}/>))}
       </div>
       <div className="p-6 flex flex-col items-center">
         <button
