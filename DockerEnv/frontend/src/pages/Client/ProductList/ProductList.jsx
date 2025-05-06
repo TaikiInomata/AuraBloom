@@ -1,9 +1,9 @@
 import {useEffect, useState} from 'react'
 
 import Product from '~/components/Product/Product'
-import ProductForm from './AddProductForm'
 import { fetchProductListAPI } from '~/apis'
 
+import ProductForm from './CreateProductForm'
 
 function ProductList() {
   const [showForm, setShowForm] = useState(false);

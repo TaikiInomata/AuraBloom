@@ -7,9 +7,11 @@ const Router = express.Router()
 
 Router.route('/')
   .get(productController.getProducts)
-
+  .post(productController.createProduct)
 
 Router.route('/:id')
   .get(productController.getDetail)
+
+Router.post('/list', productController.getProductsByIds)
 
 export const productRoute = Router

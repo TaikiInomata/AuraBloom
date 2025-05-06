@@ -23,7 +23,34 @@ const getDetail = async (req, res, next) => {
   }
 }
 
+const createProduct = async (req, res, next) => {
+  try {
+    const createdProduct = await productService.createProduct(req.body)
+
+    res.status(StatusCodes.CREATED).json(createdProduct)
+  } catch (error) {
+    next(error)
+  }
+}
+
+const getProductsByIds = async (req, res, next) => {
+  try {
+    const { ids } = req.body
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid product IDs' })
+    }
+
+    const products = await productService.getProductsByIds(ids)
+
+    res.status(StatusCodes.OK).json(products)
+  } catch (error) {
+    next(error)
+  }
+}
+
 export const productController = {
   getProducts,
-  getDetail
+  getDetail,
+  createProduct,
+  getProductsByIds
 }

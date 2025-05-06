@@ -26,7 +26,35 @@ const getDetail = async (productId) => {
   }
 }
 
+const createProduct = async (data) => {
+  try {
+    const newProduct = await productModel.createProduct(data)
+    return {
+      success: true,
+      message: 'Product created successfully!',
+      product: newProduct
+    }
+  } catch (error) {
+    throw {
+      success: false,
+      message: 'Error creating product',
+      error: error
+    }
+  }
+}
+
+const getProductsByIds = async (productIds) => {
+  try {
+    const products = await productModel.getProductList(productIds)
+    return products
+  } catch (error) {
+    throw error
+  }
+}
+
 export const productService = {
   getProducts,
-  getDetail
+  getDetail,
+  createProduct,
+  getProductsByIds
 }

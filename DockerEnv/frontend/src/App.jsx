@@ -6,8 +6,13 @@ import Login from '~/pages/Auth/Login'
 import Register from '~/pages/Auth/Register'
 import ProductDetail from '~/pages/Client/ProductDetail/ProductDetail'
 import Cart from '~/pages/Client/Cart/CartPage'
+import { useToast } from './hooks/use-toast'
+import { initToast } from './utils/authorizedAxios'
 
 function App() {
+  const { toast } = useToast()
+  initToast(toast)
+
   return (
     <Routes>
       <Route path='/login' element={<Login />}/>

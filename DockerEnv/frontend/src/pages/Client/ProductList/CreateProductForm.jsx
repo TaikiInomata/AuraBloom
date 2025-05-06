@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import productImg from '~/assets/productcard.png';
+import { useState } from 'react'
+import productImg from '~/assets/productcard.png'
+import { createProductAPI } from '~/apis'
 
 const ProductForm = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -8,27 +9,77 @@ const ProductForm = ({ onClose }) => {
     productType: '',
     origin: '',
     producer: '',
-    price: ''
-  });
+    price: '',
+    slug: '',
+    medias: [],
+    avatar: '',
+    brand: 'any',
+    rating: 0,
+    sold: 0,
+    types: [],
+    totalStock: 0,
+    discount: 0
+  })
+
+  const [productImageUrl, setProductImageUrl] = useState('')
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
       [name]: value
-    }));
-  };
+    }))
+  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form data submitted:', formData);
-    alert('Sản phẩm đã được thêm!');
-    onClose();
-  };
+  const handleImageUrlChange = (e) => {
+    setProductImageUrl(e.target.value)
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    const productData = {
+      name: formData.productName,
+      description: formData.productInfo,
+      avgPrice: formData.price,
+      totalStock: formData.totalStock,
+      slug: formData.slug || formData.productName.toLowerCase().replace(/\s+/g, '-'),
+      medias: formData.medias,
+      avatar: productImageUrl || productImg,
+      brand: formData.brand,
+      rating: formData.rating,
+      sold: formData.sold,
+      types: formData.types.map(type => ({
+        typeId: type.typeId,
+        properties: type.properties || [],
+        avatar: type.avatar || '',
+        stock: type.stock || 0,
+        price: type.price || formData.price,
+        discount: type.discount || 0,
+        createdAt: new Date().getTime(),
+        updatedAt: null,
+        _deleted: false
+      })),
+      createdAt: new Date().getTime(),
+      updatedAt: new Date().getTime(),
+      _deleted: false
+    }
+
+    try {
+      const res = await createProductAPI(productData)
+
+      if (res?.data?.success) {
+        alert('Thêm sản phẩm thành công!')}
+      onClose()
+    } catch (error) {
+      alert('Error creating product:', error)
+    }
+    onClose()
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white w-[1200px] h-[800px] rounded-2xl shadow-lg flex p-8 relative">
+      <div className="bg-white w-[1000px] h-[600px] rounded-2xl shadow-lg flex p-8 relative">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-500 hover:text-black text-xl"
@@ -43,7 +94,7 @@ const ProductForm = ({ onClose }) => {
                 {[...Array(3)].map((_, i) => (
                   <img
                     key={i}
-                    src={productImg}
+                    src={productImageUrl || productImg} 
                     alt={`thumb-${i}`}
                     className="w-20 h-28 object-cover border rounded"
                   />
@@ -52,7 +103,7 @@ const ProductForm = ({ onClose }) => {
 
               <div className="relative">
                 <img
-                  src={productImg}
+                  src={productImageUrl || productImg}
                   alt="main"
                   className="w-64 h-80 object-cover rounded"
                 />
@@ -85,47 +136,58 @@ const ProductForm = ({ onClose }) => {
 
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <label className="w-1/3">Thông tin sản phẩm:</label>
-              <input 
-                type="text" 
+              <label className="w-1/3">Mô tả sản phẩm:</label>
+              <input
+                type="text"
                 name="productInfo"
-                className="border px-2 py-1 flex-1" 
-                required 
+                className="border px-2 py-1 flex-1"
+                required
                 value={formData.productInfo}
                 onChange={handleChange}
               />
             </div>
             <div className="flex justify-between items-center">
               <label className="w-1/3">Loại:</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 name="productType"
-                className="border px-2 py-1 flex-1" 
-                required 
+                className="border px-2 py-1 flex-1"
+                required
                 value={formData.productType}
                 onChange={handleChange}
               />
             </div>
             <div className="flex justify-between items-center">
               <label className="w-1/3">Xuất xứ:</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 name="origin"
-                className="border px-2 py-1 flex-1" 
-                required 
+                className="border px-2 py-1 flex-1"
+                required
                 value={formData.origin}
                 onChange={handleChange}
               />
             </div>
             <div className="flex justify-between items-center">
               <label className="w-1/3">Nghệ nhân:</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 name="producer"
-                className="border px-2 py-1 flex-1" 
-                required 
+                className="border px-2 py-1 flex-1"
+                required
                 value={formData.producer}
                 onChange={handleChange}
+              />
+            </div>
+            <div className="flex justify-between items-center">
+              <label className="w-1/3">Hình ảnh sản phẩm:</label>
+              <input
+                type="text"
+                name="avatar"
+                className="border px-2 py-1 flex-1"
+                value={productImageUrl}
+                onChange={handleImageUrlChange}
+                placeholder="Nhập URL hình ảnh sản phẩm"
               />
             </div>
           </div>
@@ -139,7 +201,7 @@ const ProductForm = ({ onClose }) => {
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProductForm;
+export default ProductForm
