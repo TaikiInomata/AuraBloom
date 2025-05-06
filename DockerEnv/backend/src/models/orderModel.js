@@ -8,8 +8,15 @@ const ORDER_COLLECTION_SCHEMA = Joi.object({
   products: Joi.array()
     .items(
       Joi.object({
-        id: Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE),
-        quantity: Joi.number().integer().min(1).required()
+        productId: Joi.string()
+          .required()
+          .pattern(OBJECT_ID_RULE)
+          .message(OBJECT_ID_RULE_MESSAGE),
+        typeId: Joi.string()
+          .required()
+          .pattern(OBJECT_ID_RULE)
+          .message(OBJECT_ID_RULE_MESSAGE),
+        quantity: Joi.number().required()
       })
     )
     .required(),
@@ -40,9 +47,13 @@ const ORDER_COLLECTION_SCHEMA = Joi.object({
 
 const createOrder = async (data) => {
   try {
-    const validData = await ORDER_COLLECTION_SCHEMA.validateAsync(data, { abortEarly: false })
+    const validData = await ORDER_COLLECTION_SCHEMA.validateAsync(data, {
+      abortEarly: false
+    })
 
-    const res = await GET_DB().collection(ORDER_COLLECTION_NAME).insertOne(validData)
+    const res = await GET_DB()
+      .collection(ORDER_COLLECTION_NAME)
+      .insertOne(validData)
     return res
   } catch (error) {
     throw new Error(error)

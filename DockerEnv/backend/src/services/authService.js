@@ -1,10 +1,11 @@
-
 import bcryptjs from 'bcryptjs'
 import { StatusCodes } from 'http-status-codes'
 import { env } from '~/config/environment'
+import { cartModel } from '~/models/cartModel'
 import { userModel } from '~/models/userModel'
 import { JwtProvider } from '~/providers/JwtProvider'
 import ApiError from '~/utils/ApiError'
+import { USER_ROLE } from '~/utils/constants'
 
 const login = async (reqBody) => {
   // eslint-disable-next-line no-useless-catch
@@ -13,10 +14,15 @@ const login = async (reqBody) => {
     const password = reqBody.password
 
     const existUser = await userModel.findOneByEmail(email)
-    if (!existUser) throw new ApiError(StatusCodes.NOT_FOUND, 'Tài khoản không tồn tại!')
+    if (!existUser)
+      throw new ApiError(StatusCodes.NOT_FOUND, 'Tài khoản không tồn tại!')
 
     const isMatchPassword = bcryptjs.compareSync(password, existUser.password)
-    if (!isMatchPassword) throw new ApiError(StatusCodes.NOT_ACCEPTABLE, 'Mật khẩu không chính xác!')
+    if (!isMatchPassword)
+      throw new ApiError(
+        StatusCodes.NOT_ACCEPTABLE,
+        'Mật khẩu không chính xác!'
+      )
 
     const userInfo = {
       _id: existUser._id,
@@ -37,8 +43,7 @@ const login = async (reqBody) => {
     )
 
     return { existUser, accessToken, refreshToken }
-  }
-  catch (error) {
+  } catch (error) {
     throw error
   }
 }
@@ -57,9 +62,12 @@ const register = async (reqBody) => {
     }
     const createdAccount = await userModel.createAccount(data)
 
+    // Create Cart if role is buyer
+    if (reqBody.role === USER_ROLE[1]) {
+      await cartModel.createNew(createdAccount._id.toString())
+    }
     return createdAccount
-  }
-  catch (error) {
+  } catch (error) {
     throw error
   }
 }
@@ -67,9 +75,15 @@ const register = async (reqBody) => {
 const refreshToken = async (clientRefreshToken) => {
   // eslint-disable-next-line no-useless-catch
   try {
-    const refreshTokenDecoded = await JwtProvider.verify(clientRefreshToken, env.REFRESH_TOKEN_SECRET_SIGNATURE)
-    if (!refreshTokenDecoded) throw new ApiError(StatusCodes.UNAUTHORIZED, 'Refresh token không hợp lệ!')
-
+    const refreshTokenDecoded = await JwtProvider.verify(
+      clientRefreshToken,
+      env.REFRESH_TOKEN_SECRET_SIGNATURE
+    )
+    if (!refreshTokenDecoded)
+      throw new ApiError(
+        StatusCodes.UNAUTHORIZED,
+        'Refresh token không hợp lệ!'
+      )
 
     const userInfo = {
       _id: refreshTokenDecoded._id,
@@ -83,8 +97,7 @@ const refreshToken = async (clientRefreshToken) => {
     )
 
     return { accessToken }
-  }
-  catch (error) {
+  } catch (error) {
     throw error
   }
 }
