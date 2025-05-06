@@ -50,7 +50,7 @@ function ClientHeader() {
   const navigate = useNavigate()
 
   const { currentUser, logout } = useAuth()
-  const { currentCart, setCart } = useCart()
+  const { currentCart, setCart, clearCart } = useCart()
 
   const [open, setOpen] = useState(false)
 
@@ -59,6 +59,7 @@ function ClientHeader() {
   }
 
   const handleLogout = () => {
+    clearCart()
     logoutUserAPI().then(() => {
       logout()
     })

@@ -7,11 +7,15 @@ import Register from '~/pages/Auth/Register'
 import ProductDetail from '~/pages/Client/ProductDetail/ProductDetail'
 import Cart from '~/pages/Client/Cart/CartPage'
 import { useToast } from './hooks/use-toast'
-import { initToast } from './utils/authorizedAxios'
+import { initClearCart, initToast } from './utils/authorizedAxios'
+import { useCart } from '~/contexts/CartContext'
 
 function App() {
   const { toast } = useToast()
   initToast(toast)
+
+  const { clearCart } = useCart()
+  initClearCart(clearCart)
 
   return (
     <Routes>
